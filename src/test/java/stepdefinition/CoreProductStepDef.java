@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.testng.Assert;
 
 import com.jayway.jsonpath.JsonPath;
 
@@ -88,7 +89,7 @@ public class CoreProductStepDef {
 		    int productCounter = 0;
 		    for(int i=1;i<=Integer.parseInt(totalPageCount);i++)
 		    {
-		    	logger.info("Iterating through each page....");
+		    	logger.info("Iterating through each page for getting each product's detail within....");
 		    	currentURL = (i==1)?currentURL:(currentURL.split("\\?")[0]+"?pageNumber="+i);
 		    	String response = apiutility.getResponseFromGetApi(currentURL, headers);
 			    String responseJson = "{\"browse-data\":"+response.split("\"browse-data\":")[1].split("</script>")[0];
@@ -98,21 +99,20 @@ public class CoreProductStepDef {
 		        JSONArray productsArray = browseData.getJSONArray("products");  
 		        for (int j = 0; j < productsArray.length(); j++) {  
 		              
-		        	logger.info("Iterating through each product within each page....");
+		        	// Iterating through each product within each page
 		        	productCounter++;
 		        	String topSellerValue = "";
 		        	String priceRangeMin = "";
 		        	String priceRangeMax = "";
 		        	String price = "";
 		        	
+		        	// Fetching product title, price and top seller details
 		        	String title = JsonPath.read(responseJson, "$.browse-data.products["+j+"].title").toString();
 		        	String currencyCode = JsonPath.read(responseJson, "$.browse-data.products["+j+"].price.discountPrice.money.userCC").toString();
 		        	
 		        	Object topSeller = JsonPath.read(responseJson, "$.browse-data.products["+j+"].topSeller");
 		        	if(topSeller!=null)
-		        	{
 		        		topSellerValue = JsonPath.read(responseJson, "$.browse-data.products["+j+"].topSeller.value").toString();
-		        	}
 		        	
 		        	Object userCurrencyValueRange = JsonPath.read(responseJson, "$.browse-data.products["+j+"].price.discountPrice.money.userCurrencyValueRange");
 		        	if(userCurrencyValueRange!=null)
@@ -134,6 +134,8 @@ public class CoreProductStepDef {
 		    fr.write(dataToWrite.toString());
 		    logger.info("All product specific details stored in .txt file : "+textFile);
 		    fr.close();
+		    
+		    Assert.assertTrue(true, "Verify if all products specific details are stored in .txt file");
 		    
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -10,7 +10,7 @@ Feature: To test functionality of Core Product (CP)
     And User selects Jackets from All Departments
     Then User stores Price, Title and Top Seller message from each products to a text file and attach to report   
     
-	@tc1
+	@tc2
 	Scenario: Get counts of total Videos Feeds and the video feeds those are present in the page >= 3d
 		Given User invokes the "nba-warriors" url
 		When User navigates to ... -> News And Features

@@ -1,18 +1,18 @@
 package pages;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriver.Window;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import utilities.common.ConfigReader;
 import utilities.ui.UiUtility;
 
 public class WarriorsHomePage {
@@ -53,7 +53,14 @@ public class WarriorsHomePage {
 		{
 			if(uiutility.isElementDisplayed(popup_wantPreSaleTicket, 5))
 			{
-				uiutility.clickOnElement(btn_close_wantPreSaleTicketPopup);
+				if(ConfigReader.getBrowserType().equalsIgnoreCase("firefox"))
+				{
+					JavascriptExecutor js = (JavascriptExecutor) driver;
+					js.executeScript("arguments[0].click();", popup_wantPreSaleTicket);
+				}
+				else
+					uiutility.clickOnElement(btn_close_wantPreSaleTicketPopup);
+				
 				logger.info("Closed dialog seen during browser launch");
 				//btn_close_wantPreSaleTicketPopup.click();
 			}	
@@ -67,10 +74,12 @@ public class WarriorsHomePage {
 		try
 		{
 			if(uiutility.isElementDisplayed(banner_oneTrust, 5))
+			{
 				logger.info("OneTrust Banner was seen during browser launch");
 				uiutility.clickOnElement(btn_accept_oneTrustBanner);
 				//btn_accept_oneTrustBanner.click();
 				logger.info("Accepted OneTrust Banner");
+			}
 		}
 		catch(Exception e) {
 			logger.info("OneTrust Banner was not seen during browser launch");
@@ -102,7 +111,7 @@ public class WarriorsHomePage {
 				//dynamicSubMenuSelection.click();
 			}
 			
-			Thread.sleep(10000);
+			//Thread.sleep(10000);
 			logger.info("Navigated to : "+mainMenuSelection+" -> "+subMenuSelection);
 			
 		}
@@ -120,6 +129,7 @@ public class WarriorsHomePage {
 	}
 	
 	public void navigateToNewsAndFeatures() {
+		
 		Actions actions = new Actions(driver).moveToElement(navbar_secMenu).click(submenuitem_newsAndFeatures_secMenu);
 		actions.build().perform();
 		logger.info("Navigated to 'News & Features'..");

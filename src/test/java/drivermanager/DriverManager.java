@@ -1,6 +1,8 @@
 package drivermanager;
 
 
+import java.time.Duration;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -31,7 +33,7 @@ public class DriverManager {
 		if(browser.equalsIgnoreCase("chrome"))
 		{
 			WebDriverManager.chromedriver().setup();
-			chromeOptions.addArguments("start-maximized");
+			//chromeOptions.addArguments("start-maximized");
 			chromeOptions.addArguments("--remote-allow-origins=*");
 			driver.set(new ChromeDriver(chromeOptions));
 			logger.info(browser+" browser is launched");
@@ -39,7 +41,7 @@ public class DriverManager {
 		else if(browser.equalsIgnoreCase("edge"))
 		{
 			WebDriverManager.edgedriver().setup();
-			edgeOptions.addArguments("start-maximized");
+			//edgeOptions.addArguments("start-maximized");
 			edgeOptions.addArguments("--remote-allow-origins=*");
 			driver.set(new EdgeDriver(edgeOptions));
 			logger.info(browser+" browser is launched");
@@ -47,9 +49,14 @@ public class DriverManager {
 		else if(browser.equalsIgnoreCase("firefox"))
 		{
 			WebDriverManager.firefoxdriver().setup();
+			//firefoxOptions.addArguments("start-maximized");
 			driver.set(new FirefoxDriver());
 			logger.info(browser+" browser is launched");
 		}
+		
+		driver.get().manage().window().maximize();
+		driver.get().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+		
 		
 	}
 

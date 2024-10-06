@@ -14,11 +14,9 @@ import utilities.common.ConfigReader;
 @CucumberOptions(
 		features="src/test/resources/features",
 		glue={"stepdefinition","hooks"},
-		tags = "@tc1",
+		tags = "@cp",
 		monochrome = true,
-		//plugin = {"json:target/cucumber-reports/CucumberTestReport.json","html:target/cucumber-html-report"})
 		plugin = { "pretty","json:target/cucumber-reports/Cucumber.json", "html:target/cucumber-reports/report.html"})
-
 
 
 public class TestRunner extends AbstractTestNGCucumberTests{
